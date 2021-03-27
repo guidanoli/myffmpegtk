@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+# Usage: <program> <sequence> <output>
+#   sequence - file containing one file name per line in order
+#   output - output video file
+#   width - output file width in pixels
+#   height - output file height in pixels
+if [[ $# -eq 4 ]]
+then
+	set -x
+	n=$(cat "$1" | wc -l)
+	inputs=$(cat "$1" | xargs printf -- '-i "%s"\n' | xargs)
+	streamdefs=$(seq 0 $((n-1)) | awk '{print;print}' | \
+		xargs printf -- "[%d:v]scale=$3:$4:force_original_aspect_ratio=increase,crop=$3:$4[v%d];")
+	streams=$(seq 0 $((n-1)) | awk '{print;print}' | xargs printf -- "[v%d][%d:a]")
+	ffmpeg $inputs -filter_complex "$streamdefs $streams concat=n=$n:v=1:a=1[v][a]" -map "[v]" -map "[a]" "$2"
+else
+	echo "Usage: $0 <sequence> <output> <width> <height>"
+fi

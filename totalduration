@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+total=0
+for file in `find . -name 'VIDEO-*.mp4' -type f`
+do
+	dur=$(ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 "$file")
+	total=$(echo "($total + $dur)" | bc -l)
+done
+echo "($total / 60)" | bc -l

@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# Usage: <program> <order> <list>
+#   order - file in which each line is a category in order
+#   list - list of tabular form in which each line is the video name and its category
+# Prints: sequence of videos ordered by <order> and <list>
+if [[ $# -eq 2 ]]
+then
+	cat "$1" | xargs -i -n1 awk -v 'cat={}' -- '$2 == cat { print $1 }' "$2"
+else
+	echo "Usage: $0 <order> <list>"
+fi

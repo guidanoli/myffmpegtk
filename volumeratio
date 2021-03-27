@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+if [[ $# -eq 2 ]]
+then
+	input=$1
+	factor=$2
+	shift 2
+else
+	echo "Usage: $0 <input> <factor>"
+	exit 1
+fi
+dir="$(dirname "$input")/volume"
+output="$dir/$(basename "$input")"
+mkdir -p "$dir"
+if ffmpeg -i "$input" -filter:a "volume=$factor" "$output"
+then
+	echo "[ OK ] Input: $input Output: $output" >> log.txt
+else
+	echo "[ FAIL ] Input: $input" >> log.txt
+fi

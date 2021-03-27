@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+# Usage: <program> <list> <seq>
+#   list - list of tabular form in which each line is the video name and its category
+#   seq - sequence of videos (see concat)
+# Asserts everything is ok
+
+function die() { echo "$1" ; exit 1 ; }
+
+if [[ $# -eq 2 ]]
+then
+	listnl=`cat "$1" | wc -l`
+	seqnl=`cat "$2" | wc -l`
+	[[ $listnl == $seqnl ]] || die "list file and sequence file don't have the same number of lines"
+else
+	echo "Usage: $0 <list> <seq>"
+fi

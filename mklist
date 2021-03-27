@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+# Usage: <program> [<list>]
+#   list - list of videos
+if [[ $# -eq 1 ]]
+then
+	for file in `find -name 'VIDEO-*.mp4' -type f | xargs -n1 basename | sort`
+	do
+		if ! cat "$1" | grep -q -F "$file"
+		then
+			printf "$file\tnone\n" >> "$1"
+		fi
+	done
+else
+	for file in `find -name 'VIDEO-*.mp4' -type f | xargs -n1 basename | sort`
+	do
+		printf "$file\tnone\n"
+	done
+fi
