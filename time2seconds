@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+awk -F: '{
+	t = 0;
+
+	for (i = 1; i <= NF; ++i)
+	{
+		t = t * 60 + $i;
+	}
+
+	print t
+}'

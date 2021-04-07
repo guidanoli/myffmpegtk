@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+xargs -n1 | time2seconds | xargs -n2 | awk '{ print $1 - $2 }' | seconds2time
