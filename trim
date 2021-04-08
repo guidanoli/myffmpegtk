@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
-if [[ $# -eq 3 ]]
+if [[ $# -eq 4 ]]
 then
-	t=`echo "$3" "$2" | timediff`
-	name="${1%.*}_${2//:/-}_${3//:/-}.${1##*.}"
-	ffmpeg -ss "$2" -i "$1" -t "$t" -c copy "$name"
+	t=`echo "$4" "$3" | timediff`
+	ffmpeg -ss "$3" -i "$1" -t "$t" -c copy "$2"
 else
-	echo "Usage: $0 <input-file> <start-ts> <final-ts>"
+	echo "Usage: $0 <input-file> <output-file> <start-ts> <final-ts>" 2>&1
+	echo "Usage: cat list.txt | xargs -n3 $0 <input-file>" 2>&1
+	exit 1
 fi
