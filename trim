@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+if [[ $# -eq 1 ]]
+then
+	set -e
+	while read line
+	do
+		ss=`echo "$line" | awk '{ print $1 }'`
+		t=`echo "$line" | awk '{ print $2, $1 }' | timediff`
+		md5=`echo "$line" | md5sum | awk '{ print $1 }'`
+		name="${1%.*}-$md5.${1##*.}"
+		echo ffmpeg -i "$1" -ss "$ss" -t "$t $name"
+	done
+else
+	echo "$0 <video-file>" 2>&1
+	exit 1
+fi
