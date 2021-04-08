@@ -1,16 +1,9 @@
 #!/usr/bin/env bash
-if [[ $# -eq 1 ]]
+if [[ $# -eq 3 ]]
 then
-	set -e
-	while read line
-	do
-		ss=`echo "$line" | awk '{ print $1 }'`
-		t=`echo "$line" | awk '{ print $2, $1 }' | timediff`
-		md5=`echo "$line" | md5sum | awk '{ print $1 }'`
-		name="${1%.*}-$md5.${1##*.}"
-		ffmpeg -i "$1" -ss "$ss" -t "$t $name"
-	done
+	t=`echo "$3" "$2" | timediff`
+	name="${1%.*}_${2//:/-}_${3//:/-}.${1##*.}"
+	ffmpeg -ss "$2" -i "$1" -t "$t" -c copy "$name"
 else
-	echo "$0 <video-file>" 2>&1
-	exit 1
+	echo "Usage: $0 <input-file> <start-ts> <final-ts>"
 fi
