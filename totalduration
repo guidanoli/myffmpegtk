@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
+# Usage: cat files.txt | totalduration
+# Returns total number of minutes
+
 total=0
-for file in `find . -name 'VIDEO-*.mp4' -type f`
+while read file
 do
 	dur=$(ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 "$file")
 	total=$(echo "($total + $dur)" | bc -l)
