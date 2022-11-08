@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+set -e
+# reads input files from stdin, line by line
+[[ $# -ge 3 ]] || (echo "Usage: $0 <width> <height> <output>" >&2 && exit 1)
+width=$1
+height=$2
+output=$3
+scaled_files=$(mktemp)
+scale "$width" "$height" > "$scaled_files"
+scaled_files_fmt=$(mktemp)
+xargs -ord '\n' printf "file '%s'\n" < "$scaled_files" > "$scaled_files_fmt"
+ffmpeg -f concat -safe 0 -i "$scaled_files_fmt" "$output" >&2
+xargs -ord '\n' rm < "$scaled_files"
+rm "$scaled_files" "$scaled_files_fmt"

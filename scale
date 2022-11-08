@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+set -e
+# read input file from stdin and prints output file name to stdout
+[[ $# -ge 2 ]] || (echo "Usage: $0 <width> <height>" >&2 && exit 1)
+width=$1
+height=$2
+outputdir=$(mktemp -d)
+mapfile -t lines
+for line in "${lines[@]}"; do
+    input=$line
+    inputname=$(basename "$input")
+    output="$outputdir/$inputname"
+    ffmpeg -i "$input" -vf "scale=$width:$height:force_original_aspect_ratio=decrease,pad=$width:$height:(ow-iw)/2:(oh-ih)/2'" "$output" >&2
+    echo "$output"
+done
